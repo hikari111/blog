@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="maven," />
 
 
 
@@ -79,15 +79,16 @@
 
 
 
-<meta name="description" content="虚拟机配置查看虚拟机的配置, 配置文件地址&#x2F;Library&#x2F;Preferences&#x2F;VMware Fusion&#x2F;vmnet8&#x2F;dhcpd.conf 1vi &#x2F;Library&#x2F;Preferences&#x2F;VMware Fusion&#x2F;vmnet8&#x2F;dhcpd.conf  获取配置信息  子网掩码：255.255.255.0 静态ip范围：172.16.136.128 - 172.16.136.254 网关">
+<meta name="description" content="配置文件 settings：配置一些全局不愿意暴露的配置 最高级pom: 管理项目 依赖pom项目: 管理依赖 + 插件依赖  name使用引用变量的方式, 统一使用project.artifactId管理和引用 1&lt;name&gt;$&amp;#123;project.artifactId&amp;#125;&lt;&#x2F;name&gt;  当前项目的依赖使用project.parent.version 12">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mac虚拟机安装ubuntu设定联网和静态ip地址">
-<meta property="og:url" content="https://hikari111.github.io/2020/03/21/%E8%99%9A%E6%8B%9F%E6%9C%BA/001.%20mac%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E8%AE%BE%E5%AE%9A%E8%81%94%E7%BD%91%E5%92%8C%E9%9D%99%E6%80%81ip%E5%9C%B0%E5%9D%80/index.html">
+<meta property="og:title" content="Maven最佳实践">
+<meta property="og:url" content="https://hikari111.github.io/2020/03/21/%E5%B7%A5%E5%85%B7/003.%20Maven%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/index.html">
 <meta property="og:site_name" content="Hikari111の技术博客">
-<meta property="og:description" content="虚拟机配置查看虚拟机的配置, 配置文件地址&#x2F;Library&#x2F;Preferences&#x2F;VMware Fusion&#x2F;vmnet8&#x2F;dhcpd.conf 1vi &#x2F;Library&#x2F;Preferences&#x2F;VMware Fusion&#x2F;vmnet8&#x2F;dhcpd.conf  获取配置信息  子网掩码：255.255.255.0 静态ip范围：172.16.136.128 - 172.16.136.254 网关">
-<meta property="article:published_time" content="2020-03-21T07:18:27.000Z">
-<meta property="article:modified_time" content="2020-03-21T07:18:34.000Z">
+<meta property="og:description" content="配置文件 settings：配置一些全局不愿意暴露的配置 最高级pom: 管理项目 依赖pom项目: 管理依赖 + 插件依赖  name使用引用变量的方式, 统一使用project.artifactId管理和引用 1&lt;name&gt;$&amp;#123;project.artifactId&amp;#125;&lt;&#x2F;name&gt;  当前项目的依赖使用project.parent.version 12">
+<meta property="article:published_time" content="2020-03-21T08:17:36.000Z">
+<meta property="article:modified_time" content="2020-02-21T03:47:05.000Z">
 <meta property="article:author" content="Hikari111">
+<meta property="article:tag" content="maven">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://hikari111.github.io/2020/03/21/虚拟机/001. mac虚拟机安装ubuntu设定联网和静态ip地址/"/>
+  <link rel="canonical" href="https://hikari111.github.io/2020/03/21/工具/003. Maven最佳实践/"/>
 
 
 
 
 
-  <title>Mac虚拟机安装ubuntu设定联网和静态ip地址 | Hikari111の技术博客</title>
+  <title>Maven最佳实践 | Hikari111の技术博客</title>
   
 
 
@@ -231,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E8%99%9A%E6%8B%9F%E6%9C%BA/001.%20mac%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E8%AE%BE%E5%AE%9A%E8%81%94%E7%BD%91%E5%92%8C%E9%9D%99%E6%80%81ip%E5%9C%B0%E5%9D%80/">
+    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E5%B7%A5%E5%85%B7/003.%20Maven%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hikari111">
@@ -248,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Mac虚拟机安装ubuntu设定联网和静态ip地址</h1>
+          <h1 class="post-title" itemprop="name headline">Maven最佳实践</h1>
         
 
         <div class="post-meta">
@@ -260,7 +261,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T07:18:27+00:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T08:17:36+00:00">
                 2020-03-21
               </time>
             
@@ -298,27 +299,18 @@
       
 
       
-        <h2 id="虚拟机配置"><a href="#虚拟机配置" class="headerlink" title="虚拟机配置"></a>虚拟机配置</h2><p>查看虚拟机的配置, 配置文件地址<code>/Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf</code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf</span><br></pre></td></tr></table></figure>
-
-<p>获取配置信息</p>
-<ul>
-<li>子网掩码：255.255.255.0</li>
-<li>静态ip范围：172.16.136.128 - 172.16.136.254</li>
-<li>网关服务地址：172.16.136.2</li>
+        <h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><ul>
+<li>settings：配置一些全局不愿意暴露的配置</li>
+<li>最高级pom: 管理项目</li>
+<li>依赖pom项目: 管理依赖 + 插件依赖</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">subnet 172.16.136.0 netmask 255.255.255.0 &#123;</span><br><span class="line">        range 172.16.136.128 172.16.136.254;</span><br><span class="line">        option broadcast-address 172.16.136.255;</span><br><span class="line">        option domain-name-servers 172.16.136.2;</span><br><span class="line">        option domain-name localdomain;</span><br><span class="line">        default-lease-time 1800;                # default is 30 minutes</span><br><span class="line">        max-lease-time 7200;                    # default is 2 hours</span><br><span class="line">        option netbios-name-servers 172.16.136.2;</span><br><span class="line">        option routers 172.16.136.2;</span><br><span class="line">&#125;</span><br><span class="line">host vmnet8 &#123;</span><br><span class="line">        hardware ethernet 00:50:56:C0:00:08;</span><br><span class="line">        fixed-address 172.16.136.1;</span><br><span class="line">        option domain-name-servers 0.0.0.0;</span><br><span class="line">        option domain-name "";</span><br><span class="line">        option routers 0.0.0.0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>name使用引用变量的方式, 统一使用<code>project.artifactId</code>管理和引用</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>$&#123;project.artifactId&#125;<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="ubuntu配置（版本）"><a href="#ubuntu配置（版本）" class="headerlink" title="ubuntu配置（版本）"></a>ubuntu配置（版本）</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsb_release -a</span><br></pre></td></tr></table></figure>
+<p>当前项目的依赖使用<code>project.parent.version</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-filter-cache<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;project.parent.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>结果</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">No LSB modules are available.</span><br><span class="line">Distributor ID: Ubuntu</span><br><span class="line">Description:    Ubuntu 18.04.3 LTS</span><br><span class="line">Release:        18.04</span><br><span class="line">Codename:       bionic</span><br></pre></td></tr></table></figure>
-
-<p>16之前版本的配置文件： <code>/etc/network/interfaces</code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto ens33</span><br><span class="line">iface ens33 inet static</span><br><span class="line">address 172.16.136.128</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">gateway 172.16.136.2</span><br></pre></td></tr></table></figure>
-
-<p>18之后版本的配置文件: <code>/etc/netplan/*.yml</code>, 其中<code>*.yml</code> 指代其中存在的文件，设定固定ip，设定网关地址</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">network:</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">2</span></span><br><span class="line">  <span class="attr">ethernets:</span></span><br><span class="line">    <span class="attr">ens33:</span></span><br><span class="line">        <span class="attr">addresses:</span> <span class="string">[172.16.136.128/24]</span></span><br><span class="line">        <span class="attr">gateway4:</span> <span class="number">172.16</span><span class="number">.136</span><span class="number">.2</span></span><br><span class="line">        <span class="attr">nameservers:</span></span><br><span class="line">            <span class="attr">addresses:</span> <span class="string">[172.16.136.2]</span></span><br></pre></td></tr></table></figure>
+<p>二方项目的依赖在依赖pom项目，统一管理，正常项目都引入</p>
 
       
     </div>
@@ -334,6 +326,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/blog/tags/maven/" rel="tag"># maven</a>
+          
+        </div>
+      
 
       
       
@@ -343,8 +341,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2020/02/20/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="next" title="操作系统中进程和线程的区别和关系">
-                <i class="fa fa-chevron-left"></i> 操作系统中进程和线程的区别和关系
+              <a href="/blog/2020/03/21/%E7%BD%91%E5%85%B3/002.%20Spring%20Cloud%20Gateway%20%E5%AE%98%E6%96%B9%E6%A1%88%E4%BE%8B/" rel="next" title="002. Spring Cloud Gateway 官方案例">
+                <i class="fa fa-chevron-left"></i> 002. Spring Cloud Gateway 官方案例
               </a>
             
           </div>
@@ -353,8 +351,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2020/03/21/%E5%B7%A5%E5%85%B7/002.%20Mac%20%E7%B3%BB%E7%BB%9F%20VM%20%E7%BB%99%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E5%AE%9A%E5%9B%BA%E5%AE%9Aip%E5%9C%B0%E5%9D%80/" rel="prev" title="Mac VM 给服务器设定固定ip地址">
-                Mac VM 给服务器设定固定ip地址 <i class="fa fa-chevron-right"></i>
+              <a href="/blog/2020/03/21/Java%E5%9F%BA%E7%A1%80/001%20%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%88%86%E6%9E%90%E5%92%8C%E4%BD%BF%E7%94%A8/" rel="prev" title="线程池的分析和使用">
+                线程池的分析和使用 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -478,7 +476,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟机配置"><span class="nav-number">1.</span> <span class="nav-text">虚拟机配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ubuntu配置（版本）"><span class="nav-number">2.</span> <span class="nav-text">ubuntu配置（版本）</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件"><span class="nav-number">1.</span> <span class="nav-text">配置文件</span></a></li></ol></div>
             
 
           </div>

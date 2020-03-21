@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="gateway," />
 
 
 
@@ -79,16 +79,17 @@
 
 
 
-<meta name="description" content="通过线程池和Callable实现并发回调初始化流程RibbonClientConfiguration 1234567891011@Bean@ConditionalOnMissingBeanpublic ILoadBalancer ribbonLoadBalancer(IClientConfig config,        ServerList&lt;Server&gt; serverList,">
+<meta name="description" content="初始化流程RibbonClientConfiguration 1234567891011@Bean@ConditionalOnMissingBeanpublic ILoadBalancer ribbonLoadBalancer(IClientConfig config,        ServerList&lt;Server&gt; serverList, ServerListFilter&lt;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="网关&#x2F;003. 通过线程池和Callable实现并发回调">
+<meta property="og:title" content="通过线程池和Callable实现并发回调">
 <meta property="og:url" content="https://hikari111.github.io/2020/03/21/%E7%BD%91%E5%85%B3/003.%20%E9%80%9A%E8%BF%87%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CCallable%E5%AE%9E%E7%8E%B0%E5%B9%B6%E5%8F%91%E5%9B%9E%E8%B0%83/index.html">
 <meta property="og:site_name" content="Hikari111の技术博客">
-<meta property="og:description" content="通过线程池和Callable实现并发回调初始化流程RibbonClientConfiguration 1234567891011@Bean@ConditionalOnMissingBeanpublic ILoadBalancer ribbonLoadBalancer(IClientConfig config,        ServerList&lt;Server&gt; serverList,">
+<meta property="og:description" content="初始化流程RibbonClientConfiguration 1234567891011@Bean@ConditionalOnMissingBeanpublic ILoadBalancer ribbonLoadBalancer(IClientConfig config,        ServerList&lt;Server&gt; serverList, ServerListFilter&lt;">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/d44566752b8331ce81e58c50bf5bf8d1/xmlnote/WEBRESOURCE22de2b3437b532df1d8a30c42093787e/6482">
-<meta property="article:published_time" content="2020-03-21T08:06:42.717Z">
-<meta property="article:modified_time" content="2020-03-21T08:06:42.717Z">
+<meta property="article:published_time" content="2020-03-21T08:14:24.000Z">
+<meta property="article:modified_time" content="2020-03-21T08:14:30.000Z">
 <meta property="article:author" content="Hikari111">
+<meta property="article:tag" content="gateway">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://note.youdao.com/yws/public/resource/d44566752b8331ce81e58c50bf5bf8d1/xmlnote/WEBRESOURCE22de2b3437b532df1d8a30c42093787e/6482">
 
@@ -126,7 +127,7 @@
 
 
 
-  <title>网关/003. 通过线程池和Callable实现并发回调 | Hikari111の技术博客</title>
+  <title>通过线程池和Callable实现并发回调 | Hikari111の技术博客</title>
   
 
 
@@ -250,7 +251,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">网关/003. 通过线程池和Callable实现并发回调</h1>
+          <h1 class="post-title" itemprop="name headline">通过线程池和Callable实现并发回调</h1>
         
 
         <div class="post-meta">
@@ -262,7 +263,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T08:06:42+00:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T08:14:24+00:00">
                 2020-03-21
               </time>
             
@@ -300,7 +301,7 @@
       
 
       
-        <h1 id="通过线程池和Callable实现并发回调"><a href="#通过线程池和Callable实现并发回调" class="headerlink" title="通过线程池和Callable实现并发回调"></a>通过线程池和Callable实现并发回调</h1><h2 id="初始化流程"><a href="#初始化流程" class="headerlink" title="初始化流程"></a>初始化流程</h2><p><code>RibbonClientConfiguration</code></p>
+        <h2 id="初始化流程"><a href="#初始化流程" class="headerlink" title="初始化流程"></a>初始化流程</h2><p><code>RibbonClientConfiguration</code></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ILoadBalancer <span class="title">ribbonLoadBalancer</span><span class="params">(IClientConfig config,</span></span></span><br><span class="line"><span class="function"><span class="params">        ServerList&lt;Server&gt; serverList, ServerListFilter&lt;Server&gt; serverListFilter,</span></span></span><br><span class="line"><span class="function"><span class="params">        IRule rule, IPing ping, ServerListUpdater serverListUpdater)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.propertiesFactory.isSet(ILoadBalancer<span class="class">.<span class="keyword">class</span>, <span class="title">name</span>)) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.propertiesFactory.get(ILoadBalancer<span class="class">.<span class="keyword">class</span>, <span class="title">config</span>, <span class="title">name</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ZoneAwareLoadBalancer&lt;&gt;(config, rule, ping, serverList,</span><br><span class="line">            serverListFilter, serverListUpdater);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>继承链条关系</p>
@@ -340,6 +341,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/blog/tags/gateway/" rel="tag"># gateway</a>
+          
+        </div>
+      
 
       
       
@@ -349,8 +356,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2020/03/21/%E8%99%9A%E6%8B%9F%E6%9C%BA/001.%20mac%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E8%AE%BE%E5%AE%9A%E8%81%94%E7%BD%91%E5%92%8C%E9%9D%99%E6%80%81ip%E5%9C%B0%E5%9D%80/" rel="next" title="Mac虚拟机安装ubuntu设定联网和静态ip地址">
-                <i class="fa fa-chevron-left"></i> Mac虚拟机安装ubuntu设定联网和静态ip地址
+              <a href="/blog/2020/03/21/%E7%BD%91%E5%85%B3/001.%20Spring%20Cloud%20Gateway%20%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99%E5%AD%A6%E4%B9%A0%E6%95%B4%E7%90%86/" rel="next" title="001. Spring Cloud Gateway 入门资料学习整理">
+                <i class="fa fa-chevron-left"></i> 001. Spring Cloud Gateway 入门资料学习整理
               </a>
             
           </div>
@@ -359,8 +366,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2020/03/21/%E7%BD%91%E5%85%B3/002.%20Spring%20Cloud%20Gateway%20%E5%AE%98%E6%96%B9%E6%A1%88%E4%BE%8B/" rel="prev" title="网关/002. Spring Cloud Gateway 官方案例">
-                网关/002. Spring Cloud Gateway 官方案例 <i class="fa fa-chevron-right"></i>
+              <a href="/blog/2020/03/21/%E7%BD%91%E5%85%B3/002.%20Spring%20Cloud%20Gateway%20%E5%AE%98%E6%96%B9%E6%A1%88%E4%BE%8B/" rel="prev" title="002. Spring Cloud Gateway 官方案例">
+                002. Spring Cloud Gateway 官方案例 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -438,7 +445,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -446,6 +453,15 @@
 
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
             
 
           </nav>
@@ -475,7 +491,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#通过线程池和Callable实现并发回调"><span class="nav-number">1.</span> <span class="nav-text">通过线程池和Callable实现并发回调</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化流程"><span class="nav-number">1.1.</span> <span class="nav-text">初始化流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ribbon心跳检测机制"><span class="nav-number">1.2.</span> <span class="nav-text">Ribbon心跳检测机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPing"><span class="nav-number">1.3.</span> <span class="nav-text">IPing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPingStrategy"><span class="nav-number">1.4.</span> <span class="nav-text">IPingStrategy</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化流程"><span class="nav-number">1.</span> <span class="nav-text">初始化流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ribbon心跳检测机制"><span class="nav-number">2.</span> <span class="nav-text">Ribbon心跳检测机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPing"><span class="nav-number">3.</span> <span class="nav-text">IPing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPingStrategy"><span class="nav-number">4.</span> <span class="nav-text">IPingStrategy</span></a></li></ol></div>
             
 
           </div>
