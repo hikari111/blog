@@ -677,6 +677,437 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E7%BD%91%E5%85%B3/001.%20Spring%20Cloud%20Gateway%20%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99%E5%AD%A6%E4%B9%A0%E6%95%B4%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hikari111">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hikari111の技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2020/03/21/%E7%BD%91%E5%85%B3/001.%20Spring%20Cloud%20Gateway%20%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99%E5%AD%A6%E4%B9%A0%E6%95%B4%E7%90%86/" itemprop="url">001. Spring Cloud Gateway 入门资料学习整理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T16:14:24+08:00">
+                2020-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>该项目提供了一个用于在Spring MVC之上构建API网关的库。Spring Cloud Gateway旨在提供一种简单而有效的方法来路由到API，并为它们提供跨领域的关注点，例如：安全性，监视/指标和弹性。</p>
+<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><p>Spring Cloud Gateway功能：</p>
+<ul>
+<li>基于Spring Framework 5，Project Reactor和Spring Boot 2.0构建: 性能高，吞吐量高，非阻塞io加上netty</li>
+<li>能够匹配任何请求属性上的路由。</li>
+<li>谓词和过滤器特定于路由。</li>
+<li>Hystrix断路器集成。: hystrix_route、hystrix_fallback_route实现熔断限流</li>
+<li>Spring Cloud DiscoveryClient集成：能够实现负载均衡</li>
+<li>易于编写的谓词和过滤器：谓词：进行请求匹配，有很多实现工厂，匹配(header、属性、方法…); 过滤器就是对于谓词匹配到的请求进行请求加工的。</li>
+<li>请求速率限制：limit_route</li>
+<li>路径改写：rewrite_route</li>
+</ul>
+<h2 id="特征代码入门"><a href="#特征代码入门" class="headerlink" title="特征代码入门"></a>特征代码入门</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemogatewayApplication</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建一个RouteLocator，显示网关路口路由管理的功能</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RouteLocator <span class="title">customRouteLocator</span><span class="params">(RouteLocatorBuilder builder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> builder.routes()</span><br><span class="line">            <span class="comment">// 路径路由：路径含有get的就转发到http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"path_route"</span>, r -&gt; r.path(<span class="string">"/get"</span>)</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 主机路由：host为*.myhost.org的请求就转发到http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"host_route"</span>, r -&gt; r.host(<span class="string">"*.myhost.org"</span>)</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 重写路由：主机是*.rewrite.org，将地址修改foo去掉，直接转发到http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"rewrite_route"</span>, r -&gt; r.host(<span class="string">"*.rewrite.org"</span>)</span><br><span class="line">                .filters(f -&gt; f.rewritePath(<span class="string">"/foo/(?&lt;segment&gt;.*)"</span>, <span class="string">"/$&#123;segment&#125;"</span>))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 断路器路由：访问*.hystrix.org的时候，添加断路器的命令，验证允许访问进入http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"hystrix_route"</span>, r -&gt; r.host(<span class="string">"*.hystrix.org"</span>)</span><br><span class="line">                .filters(f -&gt; f.hystrix(c -&gt; c.setName(<span class="string">"slowcmd"</span>)))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 断路兜底路由：访问*.hystrixfallback.org的时候，添加断路器命令，如果验证失败fallback跳转，否则就正向跳转</span></span><br><span class="line">            .route(<span class="string">"hystrix_fallback_route"</span>, r -&gt; r.host(<span class="string">"*.hystrixfallback.org"</span>)</span><br><span class="line">                .filters(f -&gt; f.hystrix(c -&gt; c.setName(<span class="string">"slowcmd"</span>).setFallbackUri(<span class="string">"forward:/hystrixfallback"</span>)))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 限流路由：访问*.limited.org的时候，并且路径是/anything/**，添加redis的限流器的控制，通过访问目标</span></span><br><span class="line">            .route(<span class="string">"limit_route"</span>, r -&gt; r</span><br><span class="line">                .host(<span class="string">"*.limited.org"</span>).and().path(<span class="string">"/anything/**"</span>)</span><br><span class="line">                .filters(f -&gt; f.requestRateLimiter(c -&gt; c.setRateLimiter(redisRateLimiter())))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="依赖引入方式"><a href="#依赖引入方式" class="headerlink" title="依赖引入方式"></a>依赖引入方式</h2><p>要运行自己的网关，请使用spring-cloud-starter-gateway依赖项。并且制定对应的版本</p>
+<h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><p>使用<a href="https://start.spring.io/" target="_blank" rel="noopener">spring初始化网页或者工具</a></p>
+<h2 id="笔记总结"><a href="#笔记总结" class="headerlink" title="笔记总结"></a>笔记总结</h2><p>我的目的是将我们在线系统引入网关，初步想实现的功能就是通过网关进行后台接口的请求，后台的服务进行多实例化不是，使用docker-compose配置启动的实力，加入redis实现服务调用的无状态化。</p>
+<p>进而在在网关层实现一部分功能：熔断和限流的措施，进行功能接触。</p>
+<p>总结下网关：<br>    路由匹配 - 谓词匹配 - 过滤器加工 的链式处理<br>    谓词有很多实现的匹配工厂类能够直接使用，过滤器相同<br>    我们主要编写的就是谓词和过滤器，添加配置，实现网关的功能。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E6%9D%83%E9%99%90/001.%20Springboot%20%E6%95%B4%E5%90%88Shiro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hikari111">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hikari111の技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2020/03/21/%E6%9D%83%E9%99%90/001.%20Springboot%20%E6%95%B4%E5%90%88Shiro/" itemprop="url">Springboot 整合Shiro</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T16:14:24+08:00">
+                2020-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="原理说明"><a href="#原理说明" class="headerlink" title="原理说明"></a>原理说明</h2><p>Shiro是一个过滤器，所以springboot项目要初始化一个过滤器</p>
+<p>SecurityManager包含了Shiro的入口功能，会话、缓存、用户认证、用户授权等等的功能，需要初始化</p>
+<p>Shiro-Redis,为了实现多实例，或者无状态微服务化，shiro没有默认提供Redis相关组件的实现，引入外部依赖配置后直接使用</p>
+<h2 id="Shiro组件接口"><a href="#Shiro组件接口" class="headerlink" title="Shiro组件接口"></a>Shiro组件接口</h2><ul>
+<li>SecurityManager<ul>
+<li>CacheManager</li>
+<li>Realm</li>
+<li>SessionManager</li>
+<li>…</li>
+</ul>
+</li>
+<li>CacheManager<ul>
+<li>堆内缓存</li>
+<li>堆外缓存</li>
+<li>中间件缓存</li>
+</ul>
+</li>
+<li>SessionManager<ul>
+<li>SessionDAO<ul>
+<li>堆内缓存</li>
+<li>堆外缓存</li>
+<li>中间件缓存</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Realm<ul>
+<li>Token：允许自定义，设定基本参数</li>
+<li>AuthenticationInfo：SimpleAuthenticationInfo</li>
+<li>AuthorizationInfo：SimpleAuthorizationInfo</li>
+</ul>
+</li>
+</ul>
+<h2 id="创建springboot项目"><a href="#创建springboot项目" class="headerlink" title="创建springboot项目"></a>创建springboot项目</h2><p>通过SpringBoot io进行创建</p>
+<h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><p>依赖关系</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">org.apache.shiro:shiro-spring-boot-starter</span><br><span class="line">  org.apache.shiro:shiro-spring-boot-starter</span><br><span class="line">    org.apache.shiro:shiro-spring</span><br><span class="line">      org.apache.shiro:shiro-core</span><br><span class="line">      org.apache.shiro:shiro-web</span><br><span class="line">org.springframework.data:spring-data-redis</span><br><span class="line">redis.clients:jedis</span><br><span class="line">org.crazycake:shiro-redis</span><br><span class="line">  redis.clients:jedis</span><br></pre></td></tr></table></figure>
+
+<h2 id="添加配置"><a href="#添加配置" class="headerlink" title="添加配置"></a>添加配置</h2><p>主体配置：<code>ShiroConfig</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> wlh.study.service.basic.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.cache.CacheManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.mgt.DefaultSecurityManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.realm.Realm;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.session.mgt.SessionManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.spring.web.ShiroFilterFactoryBean;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.web.mgt.DefaultWebSecurityManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.web.session.mgt.DefaultWebSessionManager;</span><br><span class="line"><span class="keyword">import</span> org.crazycake.shiro.RedisCacheManager;</span><br><span class="line"><span class="keyword">import</span> org.crazycake.shiro.RedisManager;</span><br><span class="line"><span class="keyword">import</span> org.crazycake.shiro.RedisSessionDAO;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.LinkedHashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: wulonghuai</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: ShiroConfig</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span>: 2020/3/11 9:44 下午</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShiroConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">DefaultSecurityManager <span class="title">securityManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    DefaultSecurityManager defaultSecurityManager = <span class="keyword">new</span> DefaultWebSecurityManager();</span><br><span class="line">    defaultSecurityManager.setRealm(shiroRealm());</span><br><span class="line">    defaultSecurityManager.setCacheManager(cacheManager());</span><br><span class="line">    defaultSecurityManager.setSessionManager(sessionManager());</span><br><span class="line">    <span class="keyword">return</span> defaultSecurityManager;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">CacheManager <span class="title">cacheManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    RedisCacheManager redisCacheManager = <span class="keyword">new</span> RedisCacheManager();</span><br><span class="line">    redisCacheManager.setRedisManager(redisManager());</span><br><span class="line">    redisCacheManager.setPrincipalIdFieldName(<span class="string">"userName"</span>);</span><br><span class="line">    <span class="keyword">return</span> redisCacheManager;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">SessionManager <span class="title">sessionManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    DefaultWebSessionManager sessionManager = <span class="keyword">new</span> DefaultWebSessionManager();</span><br><span class="line">    sessionManager.setSessionDAO(redisSessionDAO());</span><br><span class="line">    <span class="keyword">return</span> sessionManager;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">RedisManager <span class="title">redisManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    RedisManager redisManager = <span class="keyword">new</span> RedisManager();</span><br><span class="line">    <span class="keyword">return</span> redisManager;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">RedisSessionDAO <span class="title">redisSessionDAO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    RedisSessionDAO redisSessionDAO = <span class="keyword">new</span> RedisSessionDAO();</span><br><span class="line">    redisSessionDAO.setRedisManager(redisManager());</span><br><span class="line">    <span class="keyword">return</span> redisSessionDAO;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">ShiroFilterFactoryBean <span class="title">shiroFilterFactoryBean</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ShiroFilterFactoryBean factoryBean = <span class="keyword">new</span> ShiroFilterFactoryBean();</span><br><span class="line">    factoryBean.setSecurityManager(securityManager());</span><br><span class="line">    Map&lt;String, String&gt; filterChainDefinitionMap = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">"/user/login"</span>, <span class="string">"anon"</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">"/user/logout"</span>, <span class="string">"anon"</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">"/**"</span>, <span class="string">"authc"</span>);</span><br><span class="line">    factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);</span><br><span class="line">    <span class="keyword">return</span> factoryBean;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">Realm <span class="title">shiroRealm</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ShiroRealm();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>数据存储配置<code>ShiroRealm</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> wlh.study.service.basic.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authz.AuthorizationInfo;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authz.SimpleAuthorizationInfo;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.realm.AuthenticatingRealm;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.realm.AuthorizingRealm;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.subject.PrincipalCollection;</span><br><span class="line"><span class="keyword">import</span> wlh.study.common.domain.User;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: wulonghuai</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: ShiroRealm</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span>: 2020/3/11 9:50 下午</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShiroRealm</span> <span class="keyword">extends</span> <span class="title">AuthorizingRealm</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> AuthenticationInfo <span class="title">doGetAuthenticationInfo</span><span class="params">(AuthenticationToken authenticationToken)</span> <span class="keyword">throws</span> AuthenticationException </span>&#123;</span><br><span class="line">    UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;</span><br><span class="line">    User user = getUserByUserName(token.getUsername());</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> SimpleAuthenticationInfo(user, user.getPassword(), getName());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> User <span class="title">getUserByUserName</span><span class="params">(String userName)</span> </span>&#123;</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setUserName(userName);</span><br><span class="line">    user.setPassword(<span class="string">"1234"</span>);</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> AuthorizationInfo <span class="title">doGetAuthorizationInfo</span><span class="params">(PrincipalCollection principalCollection)</span> </span>&#123;</span><br><span class="line">    AuthorizationInfo authorizationInfo = <span class="keyword">new</span> SimpleAuthorizationInfo();</span><br><span class="line">    <span class="keyword">return</span> authorizationInfo;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>登录接口<code>UserController</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> wlh.study.service.basic.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.swagger.annotations.Api;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.SecurityUtils;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.AuthenticationException;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.AuthenticationToken;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.UsernamePasswordToken;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.session.Session;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.subject.Subject;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.*;</span><br><span class="line"><span class="keyword">import</span> wlh.study.common.dto.ResultObject;</span><br><span class="line"><span class="keyword">import</span> wlh.study.service.basic.vo.UserNameAndPasswordVO;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: wulonghuai</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 登录接口</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span>: 2020/3/11 6:17 下午</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@Api</span>(description = <span class="string">"用户相关接口"</span>)</span><br><span class="line"><span class="meta">@RequestMapping</span>(path = <span class="string">"/user"</span>)</span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@PostMapping</span>(path = <span class="string">"/login"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">login</span><span class="params">(@RequestBody UserNameAndPasswordVO vo)</span> </span>&#123;</span><br><span class="line">    Subject subject = SecurityUtils.getSubject();</span><br><span class="line">    AuthenticationToken token = <span class="keyword">new</span> UsernamePasswordToken(vo.getUserName(), vo.getPassword());</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      subject.login(token);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (AuthenticationException e) &#123;</span><br><span class="line">      <span class="keyword">return</span> ResultObject.failObject(<span class="string">"权限验证失败，检查用户名和密码"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">      <span class="keyword">return</span> ResultObject.failObject(<span class="string">"系统出现运行时异常"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      <span class="keyword">return</span> ResultObject.failObject(<span class="string">"系统出现异常"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    Session session = SecurityUtils.getSubject().getSession();</span><br><span class="line">    session.setAttribute(<span class="string">"user"</span>, vo);</span><br><span class="line">    <span class="keyword">return</span> ResultObject.successObject(<span class="string">""</span>, <span class="string">"登录成功"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@PostMapping</span>(path = <span class="string">"/logout"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">logout</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Subject subject = SecurityUtils.getSubject();</span><br><span class="line">    subject.logout();</span><br><span class="line">    <span class="keyword">return</span> ResultObject.successObject(<span class="string">""</span>, <span class="string">"退出成功"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@PostMapping</span>(path = <span class="string">"/getUserInfo"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">getUserInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Subject subject = SecurityUtils.getSubject();</span><br><span class="line">    UserNameAndPasswordVO user = (UserNameAndPasswordVO)subject.getSession().getAttribute(<span class="string">"user"</span>);</span><br><span class="line">    <span class="keyword">return</span> ResultObject.successObject(user, <span class="string">"获取用户信息成功"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置注意事项"><a href="#配置注意事项" class="headerlink" title="配置注意事项"></a>配置注意事项</h2><p>配置过滤规则的时候注意<code>ShiroFilterFactoryBean</code></p>
+<p>需要使用<code>LinkedHashMap</code>,<code>filterChainDefinitionMap</code>设定的时候，必须先设定<code>anon</code>,最后<code>authc</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function">ShiroFilterFactoryBean <span class="title">shiroFilterFactoryBean</span><span class="params">()</span></span>&#123;</span><br><span class="line">  ShiroFilterFactoryBean factoryBean = <span class="keyword">new</span> ShiroFilterFactoryBean();</span><br><span class="line">  factoryBean.setSecurityManager(securityManager());</span><br><span class="line">  Map&lt;String, String&gt; filterChainDefinitionMap = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">  filterChainDefinitionMap.put(<span class="string">"/user/login"</span>, <span class="string">"anon"</span>);</span><br><span class="line">  filterChainDefinitionMap.put(<span class="string">"/user/logout"</span>, <span class="string">"anon"</span>);</span><br><span class="line">  filterChainDefinitionMap.put(<span class="string">"/**"</span>, <span class="string">"authc"</span>);</span><br><span class="line">  factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);</span><br><span class="line">  <span class="keyword">return</span> factoryBean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>shiroFilterFactoryBean</code>的Bean名称必须命名成为如此</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://alexxiyang.github.io/shiro-redis/" target="_blank" rel="noopener">ShiroRedis官方文档</a></p>
+<p><a href="https://www.cnblogs.com/shyroke/p/10138705.html" target="_blank" rel="noopener">anon不生效</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E5%B7%A5%E5%85%B7/001.%20Idea%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hikari111">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hikari111の技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2020/03/21/%E5%B7%A5%E5%85%B7/001.%20Idea%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" itemprop="url">Idea相关的操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T16:14:24+08:00">
+                2020-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>文件<code>.idea</code>文件夹下的<code>workspace.xml</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">component</span> <span class="attr">name</span>=<span class="string">"RunDashboard"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"configurationTypes"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"SpringBootApplicationConfigurationType"</span> /&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"ruleStates"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">RuleState</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"ConfigurationTypeDashboardGroupingRule"</span> /&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">RuleState</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">RuleState</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"StatusDashboardGroupingRule"</span> /&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">RuleState</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"contentProportion"</span> <span class="attr">value</span>=<span class="string">"0.2061776"</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E7%BD%91%E5%85%B3/002.%20Spring%20Cloud%20Gateway%20%E5%AE%98%E6%96%B9%E6%A1%88%E4%BE%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -962,7 +1393,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E7%BD%91%E5%85%B3/001.%20Spring%20Cloud%20Gateway%20%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99%E5%AD%A6%E4%B9%A0%E6%95%B4%E7%90%86/">
+    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E5%B7%A5%E5%85%B7/002.%20mac%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E8%AE%BE%E5%AE%9A%E8%81%94%E7%BD%91%E5%92%8C%E9%9D%99%E6%80%81ip%E5%9C%B0%E5%9D%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hikari111">
@@ -981,578 +1412,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/2020/03/21/%E7%BD%91%E5%85%B3/001.%20Spring%20Cloud%20Gateway%20%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99%E5%AD%A6%E4%B9%A0%E6%95%B4%E7%90%86/" itemprop="url">001. Spring Cloud Gateway 入门资料学习整理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T16:14:24+08:00">
-                2020-03-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>该项目提供了一个用于在Spring MVC之上构建API网关的库。Spring Cloud Gateway旨在提供一种简单而有效的方法来路由到API，并为它们提供跨领域的关注点，例如：安全性，监视/指标和弹性。</p>
-<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><p>Spring Cloud Gateway功能：</p>
-<ul>
-<li>基于Spring Framework 5，Project Reactor和Spring Boot 2.0构建: 性能高，吞吐量高，非阻塞io加上netty</li>
-<li>能够匹配任何请求属性上的路由。</li>
-<li>谓词和过滤器特定于路由。</li>
-<li>Hystrix断路器集成。: hystrix_route、hystrix_fallback_route实现熔断限流</li>
-<li>Spring Cloud DiscoveryClient集成：能够实现负载均衡</li>
-<li>易于编写的谓词和过滤器：谓词：进行请求匹配，有很多实现工厂，匹配(header、属性、方法…); 过滤器就是对于谓词匹配到的请求进行请求加工的。</li>
-<li>请求速率限制：limit_route</li>
-<li>路径改写：rewrite_route</li>
-</ul>
-<h2 id="特征代码入门"><a href="#特征代码入门" class="headerlink" title="特征代码入门"></a>特征代码入门</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemogatewayApplication</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建一个RouteLocator，显示网关路口路由管理的功能</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RouteLocator <span class="title">customRouteLocator</span><span class="params">(RouteLocatorBuilder builder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> builder.routes()</span><br><span class="line">            <span class="comment">// 路径路由：路径含有get的就转发到http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"path_route"</span>, r -&gt; r.path(<span class="string">"/get"</span>)</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 主机路由：host为*.myhost.org的请求就转发到http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"host_route"</span>, r -&gt; r.host(<span class="string">"*.myhost.org"</span>)</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 重写路由：主机是*.rewrite.org，将地址修改foo去掉，直接转发到http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"rewrite_route"</span>, r -&gt; r.host(<span class="string">"*.rewrite.org"</span>)</span><br><span class="line">                .filters(f -&gt; f.rewritePath(<span class="string">"/foo/(?&lt;segment&gt;.*)"</span>, <span class="string">"/$&#123;segment&#125;"</span>))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 断路器路由：访问*.hystrix.org的时候，添加断路器的命令，验证允许访问进入http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"hystrix_route"</span>, r -&gt; r.host(<span class="string">"*.hystrix.org"</span>)</span><br><span class="line">                .filters(f -&gt; f.hystrix(c -&gt; c.setName(<span class="string">"slowcmd"</span>)))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 断路兜底路由：访问*.hystrixfallback.org的时候，添加断路器命令，如果验证失败fallback跳转，否则就正向跳转</span></span><br><span class="line">            .route(<span class="string">"hystrix_fallback_route"</span>, r -&gt; r.host(<span class="string">"*.hystrixfallback.org"</span>)</span><br><span class="line">                .filters(f -&gt; f.hystrix(c -&gt; c.setName(<span class="string">"slowcmd"</span>).setFallbackUri(<span class="string">"forward:/hystrixfallback"</span>)))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 限流路由：访问*.limited.org的时候，并且路径是/anything/**，添加redis的限流器的控制，通过访问目标</span></span><br><span class="line">            .route(<span class="string">"limit_route"</span>, r -&gt; r</span><br><span class="line">                .host(<span class="string">"*.limited.org"</span>).and().path(<span class="string">"/anything/**"</span>)</span><br><span class="line">                .filters(f -&gt; f.requestRateLimiter(c -&gt; c.setRateLimiter(redisRateLimiter())))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="依赖引入方式"><a href="#依赖引入方式" class="headerlink" title="依赖引入方式"></a>依赖引入方式</h2><p>要运行自己的网关，请使用spring-cloud-starter-gateway依赖项。并且制定对应的版本</p>
-<h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><p>使用<a href="https://start.spring.io/" target="_blank" rel="noopener">spring初始化网页或者工具</a></p>
-<h2 id="笔记总结"><a href="#笔记总结" class="headerlink" title="笔记总结"></a>笔记总结</h2><p>我的目的是将我们在线系统引入网关，初步想实现的功能就是通过网关进行后台接口的请求，后台的服务进行多实例化不是，使用docker-compose配置启动的实力，加入redis实现服务调用的无状态化。</p>
-<p>进而在在网关层实现一部分功能：熔断和限流的措施，进行功能接触。</p>
-<p>总结下网关：<br>    路由匹配 - 谓词匹配 - 过滤器加工 的链式处理<br>    谓词有很多实现的匹配工厂类能够直接使用，过滤器相同<br>    我们主要编写的就是谓词和过滤器，添加配置，实现网关的功能。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E5%B7%A5%E5%85%B7/001.%20Idea%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hikari111">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hikari111の技术博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2020/03/21/%E5%B7%A5%E5%85%B7/001.%20Idea%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" itemprop="url">Idea相关的操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T16:14:24+08:00">
-                2020-03-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>文件<code>.idea</code>文件夹下的<code>workspace.xml</code></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">component</span> <span class="attr">name</span>=<span class="string">"RunDashboard"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"configurationTypes"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"SpringBootApplicationConfigurationType"</span> /&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"ruleStates"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">RuleState</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"ConfigurationTypeDashboardGroupingRule"</span> /&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">RuleState</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">RuleState</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"StatusDashboardGroupingRule"</span> /&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">RuleState</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"contentProportion"</span> <span class="attr">value</span>=<span class="string">"0.2061776"</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E6%9D%83%E9%99%90/001.%20Springboot%20%E6%95%B4%E5%90%88Shiro/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hikari111">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hikari111の技术博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2020/03/21/%E6%9D%83%E9%99%90/001.%20Springboot%20%E6%95%B4%E5%90%88Shiro/" itemprop="url">Springboot 整合Shiro</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T16:14:24+08:00">
-                2020-03-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="原理说明"><a href="#原理说明" class="headerlink" title="原理说明"></a>原理说明</h2><p>Shiro是一个过滤器，所以springboot项目要初始化一个过滤器</p>
-<p>SecurityManager包含了Shiro的入口功能，会话、缓存、用户认证、用户授权等等的功能，需要初始化</p>
-<p>Shiro-Redis,为了实现多实例，或者无状态微服务化，shiro没有默认提供Redis相关组件的实现，引入外部依赖配置后直接使用</p>
-<h2 id="Shiro组件接口"><a href="#Shiro组件接口" class="headerlink" title="Shiro组件接口"></a>Shiro组件接口</h2><ul>
-<li>SecurityManager<ul>
-<li>CacheManager</li>
-<li>Realm</li>
-<li>SessionManager</li>
-<li>…</li>
-</ul>
-</li>
-<li>CacheManager<ul>
-<li>堆内缓存</li>
-<li>堆外缓存</li>
-<li>中间件缓存</li>
-</ul>
-</li>
-<li>SessionManager<ul>
-<li>SessionDAO<ul>
-<li>堆内缓存</li>
-<li>堆外缓存</li>
-<li>中间件缓存</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Realm<ul>
-<li>Token：允许自定义，设定基本参数</li>
-<li>AuthenticationInfo：SimpleAuthenticationInfo</li>
-<li>AuthorizationInfo：SimpleAuthorizationInfo</li>
-</ul>
-</li>
-</ul>
-<h2 id="创建springboot项目"><a href="#创建springboot项目" class="headerlink" title="创建springboot项目"></a>创建springboot项目</h2><p>通过SpringBoot io进行创建</p>
-<h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><p>依赖关系</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">org.apache.shiro:shiro-spring-boot-starter</span><br><span class="line">  org.apache.shiro:shiro-spring-boot-starter</span><br><span class="line">    org.apache.shiro:shiro-spring</span><br><span class="line">      org.apache.shiro:shiro-core</span><br><span class="line">      org.apache.shiro:shiro-web</span><br><span class="line">org.springframework.data:spring-data-redis</span><br><span class="line">redis.clients:jedis</span><br><span class="line">org.crazycake:shiro-redis</span><br><span class="line">  redis.clients:jedis</span><br></pre></td></tr></table></figure>
-
-<h2 id="添加配置"><a href="#添加配置" class="headerlink" title="添加配置"></a>添加配置</h2><p>主体配置：<code>ShiroConfig</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> wlh.study.service.basic.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.cache.CacheManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.mgt.DefaultSecurityManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.realm.Realm;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.session.mgt.SessionManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.spring.web.ShiroFilterFactoryBean;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.web.mgt.DefaultWebSecurityManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.web.session.mgt.DefaultWebSessionManager;</span><br><span class="line"><span class="keyword">import</span> org.crazycake.shiro.RedisCacheManager;</span><br><span class="line"><span class="keyword">import</span> org.crazycake.shiro.RedisManager;</span><br><span class="line"><span class="keyword">import</span> org.crazycake.shiro.RedisSessionDAO;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.LinkedHashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: wulonghuai</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: ShiroConfig</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span>: 2020/3/11 9:44 下午</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShiroConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">DefaultSecurityManager <span class="title">securityManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    DefaultSecurityManager defaultSecurityManager = <span class="keyword">new</span> DefaultWebSecurityManager();</span><br><span class="line">    defaultSecurityManager.setRealm(shiroRealm());</span><br><span class="line">    defaultSecurityManager.setCacheManager(cacheManager());</span><br><span class="line">    defaultSecurityManager.setSessionManager(sessionManager());</span><br><span class="line">    <span class="keyword">return</span> defaultSecurityManager;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">CacheManager <span class="title">cacheManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    RedisCacheManager redisCacheManager = <span class="keyword">new</span> RedisCacheManager();</span><br><span class="line">    redisCacheManager.setRedisManager(redisManager());</span><br><span class="line">    redisCacheManager.setPrincipalIdFieldName(<span class="string">"userName"</span>);</span><br><span class="line">    <span class="keyword">return</span> redisCacheManager;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">SessionManager <span class="title">sessionManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    DefaultWebSessionManager sessionManager = <span class="keyword">new</span> DefaultWebSessionManager();</span><br><span class="line">    sessionManager.setSessionDAO(redisSessionDAO());</span><br><span class="line">    <span class="keyword">return</span> sessionManager;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">RedisManager <span class="title">redisManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    RedisManager redisManager = <span class="keyword">new</span> RedisManager();</span><br><span class="line">    <span class="keyword">return</span> redisManager;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">RedisSessionDAO <span class="title">redisSessionDAO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    RedisSessionDAO redisSessionDAO = <span class="keyword">new</span> RedisSessionDAO();</span><br><span class="line">    redisSessionDAO.setRedisManager(redisManager());</span><br><span class="line">    <span class="keyword">return</span> redisSessionDAO;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">ShiroFilterFactoryBean <span class="title">shiroFilterFactoryBean</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ShiroFilterFactoryBean factoryBean = <span class="keyword">new</span> ShiroFilterFactoryBean();</span><br><span class="line">    factoryBean.setSecurityManager(securityManager());</span><br><span class="line">    Map&lt;String, String&gt; filterChainDefinitionMap = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">"/user/login"</span>, <span class="string">"anon"</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">"/user/logout"</span>, <span class="string">"anon"</span>);</span><br><span class="line">    filterChainDefinitionMap.put(<span class="string">"/**"</span>, <span class="string">"authc"</span>);</span><br><span class="line">    factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);</span><br><span class="line">    <span class="keyword">return</span> factoryBean;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function">Realm <span class="title">shiroRealm</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ShiroRealm();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>数据存储配置<code>ShiroRealm</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> wlh.study.service.basic.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authz.AuthorizationInfo;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authz.SimpleAuthorizationInfo;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.realm.AuthenticatingRealm;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.realm.AuthorizingRealm;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.subject.PrincipalCollection;</span><br><span class="line"><span class="keyword">import</span> wlh.study.common.domain.User;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: wulonghuai</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: ShiroRealm</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span>: 2020/3/11 9:50 下午</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShiroRealm</span> <span class="keyword">extends</span> <span class="title">AuthorizingRealm</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> AuthenticationInfo <span class="title">doGetAuthenticationInfo</span><span class="params">(AuthenticationToken authenticationToken)</span> <span class="keyword">throws</span> AuthenticationException </span>&#123;</span><br><span class="line">    UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;</span><br><span class="line">    User user = getUserByUserName(token.getUsername());</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> SimpleAuthenticationInfo(user, user.getPassword(), getName());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> User <span class="title">getUserByUserName</span><span class="params">(String userName)</span> </span>&#123;</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setUserName(userName);</span><br><span class="line">    user.setPassword(<span class="string">"1234"</span>);</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> AuthorizationInfo <span class="title">doGetAuthorizationInfo</span><span class="params">(PrincipalCollection principalCollection)</span> </span>&#123;</span><br><span class="line">    AuthorizationInfo authorizationInfo = <span class="keyword">new</span> SimpleAuthorizationInfo();</span><br><span class="line">    <span class="keyword">return</span> authorizationInfo;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>登录接口<code>UserController</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> wlh.study.service.basic.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.swagger.annotations.Api;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.SecurityUtils;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.AuthenticationException;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.AuthenticationToken;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.UsernamePasswordToken;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.session.Session;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.subject.Subject;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.*;</span><br><span class="line"><span class="keyword">import</span> wlh.study.common.dto.ResultObject;</span><br><span class="line"><span class="keyword">import</span> wlh.study.service.basic.vo.UserNameAndPasswordVO;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: wulonghuai</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 登录接口</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span>: 2020/3/11 6:17 下午</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@Api</span>(description = <span class="string">"用户相关接口"</span>)</span><br><span class="line"><span class="meta">@RequestMapping</span>(path = <span class="string">"/user"</span>)</span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@PostMapping</span>(path = <span class="string">"/login"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">login</span><span class="params">(@RequestBody UserNameAndPasswordVO vo)</span> </span>&#123;</span><br><span class="line">    Subject subject = SecurityUtils.getSubject();</span><br><span class="line">    AuthenticationToken token = <span class="keyword">new</span> UsernamePasswordToken(vo.getUserName(), vo.getPassword());</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      subject.login(token);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (AuthenticationException e) &#123;</span><br><span class="line">      <span class="keyword">return</span> ResultObject.failObject(<span class="string">"权限验证失败，检查用户名和密码"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">      <span class="keyword">return</span> ResultObject.failObject(<span class="string">"系统出现运行时异常"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      <span class="keyword">return</span> ResultObject.failObject(<span class="string">"系统出现异常"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    Session session = SecurityUtils.getSubject().getSession();</span><br><span class="line">    session.setAttribute(<span class="string">"user"</span>, vo);</span><br><span class="line">    <span class="keyword">return</span> ResultObject.successObject(<span class="string">""</span>, <span class="string">"登录成功"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@PostMapping</span>(path = <span class="string">"/logout"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">logout</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Subject subject = SecurityUtils.getSubject();</span><br><span class="line">    subject.logout();</span><br><span class="line">    <span class="keyword">return</span> ResultObject.successObject(<span class="string">""</span>, <span class="string">"退出成功"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@PostMapping</span>(path = <span class="string">"/getUserInfo"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">getUserInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Subject subject = SecurityUtils.getSubject();</span><br><span class="line">    UserNameAndPasswordVO user = (UserNameAndPasswordVO)subject.getSession().getAttribute(<span class="string">"user"</span>);</span><br><span class="line">    <span class="keyword">return</span> ResultObject.successObject(user, <span class="string">"获取用户信息成功"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="配置注意事项"><a href="#配置注意事项" class="headerlink" title="配置注意事项"></a>配置注意事项</h2><p>配置过滤规则的时候注意<code>ShiroFilterFactoryBean</code></p>
-<p>需要使用<code>LinkedHashMap</code>,<code>filterChainDefinitionMap</code>设定的时候，必须先设定<code>anon</code>,最后<code>authc</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function">ShiroFilterFactoryBean <span class="title">shiroFilterFactoryBean</span><span class="params">()</span></span>&#123;</span><br><span class="line">  ShiroFilterFactoryBean factoryBean = <span class="keyword">new</span> ShiroFilterFactoryBean();</span><br><span class="line">  factoryBean.setSecurityManager(securityManager());</span><br><span class="line">  Map&lt;String, String&gt; filterChainDefinitionMap = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">  filterChainDefinitionMap.put(<span class="string">"/user/login"</span>, <span class="string">"anon"</span>);</span><br><span class="line">  filterChainDefinitionMap.put(<span class="string">"/user/logout"</span>, <span class="string">"anon"</span>);</span><br><span class="line">  filterChainDefinitionMap.put(<span class="string">"/**"</span>, <span class="string">"authc"</span>);</span><br><span class="line">  factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);</span><br><span class="line">  <span class="keyword">return</span> factoryBean;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>shiroFilterFactoryBean</code>的Bean名称必须命名成为如此</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://alexxiyang.github.io/shiro-redis/" target="_blank" rel="noopener">ShiroRedis官方文档</a></p>
-<p><a href="https://www.cnblogs.com/shyroke/p/10138705.html" target="_blank" rel="noopener">anon不生效</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E5%B7%A5%E5%85%B7/002.%20Mac%20%E7%B3%BB%E7%BB%9F%20VM%20%E7%BB%99%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E5%AE%9A%E5%9B%BA%E5%AE%9Aip%E5%9C%B0%E5%9D%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hikari111">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hikari111の技术博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2020/03/21/%E5%B7%A5%E5%85%B7/002.%20Mac%20%E7%B3%BB%E7%BB%9F%20VM%20%E7%BB%99%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E5%AE%9A%E5%9B%BA%E5%AE%9Aip%E5%9C%B0%E5%9D%80/" itemprop="url">Mac VM 给服务器设定固定ip地址</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T16:14:24+08:00">
-                2020-03-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="虚拟机配置"><a href="#虚拟机配置" class="headerlink" title="虚拟机配置"></a>虚拟机配置</h2><p>查看虚拟机的配置, 配置文件地址<code>/Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf</code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf</span><br></pre></td></tr></table></figure>
-
-<p>获取配置信息</p>
-<ul>
-<li>子网掩码：255.255.255.0</li>
-<li>静态ip范围：172.16.136.128 - 172.16.136.254</li>
-<li>网关服务地址：172.16.136.2</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">subnet 172.16.136.0 netmask 255.255.255.0 &#123;</span><br><span class="line">        range 172.16.136.128 172.16.136.254;</span><br><span class="line">        option broadcast-address 172.16.136.255;</span><br><span class="line">        option domain-name-servers 172.16.136.2;</span><br><span class="line">        option domain-name localdomain;</span><br><span class="line">        default-lease-time 1800;                # default is 30 minutes</span><br><span class="line">        max-lease-time 7200;                    # default is 2 hours</span><br><span class="line">        option netbios-name-servers 172.16.136.2;</span><br><span class="line">        option routers 172.16.136.2;</span><br><span class="line">&#125;</span><br><span class="line">host vmnet8 &#123;</span><br><span class="line">        hardware ethernet 00:50:56:C0:00:08;</span><br><span class="line">        fixed-address 172.16.136.1;</span><br><span class="line">        option domain-name-servers 0.0.0.0;</span><br><span class="line">        option domain-name "";</span><br><span class="line">        option routers 0.0.0.0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="ubuntu配置（版本）"><a href="#ubuntu配置（版本）" class="headerlink" title="ubuntu配置（版本）"></a>ubuntu配置（版本）</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsb_release -a</span><br></pre></td></tr></table></figure>
-
-<p>结果</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">No LSB modules are available.</span><br><span class="line">Distributor ID: Ubuntu</span><br><span class="line">Description:    Ubuntu 18.04.3 LTS</span><br><span class="line">Release:        18.04</span><br><span class="line">Codename:       bionic</span><br></pre></td></tr></table></figure>
-
-<p>16之前版本的配置文件： <code>/etc/network/interfaces</code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto ens33</span><br><span class="line">iface ens33 inet static</span><br><span class="line">address 172.16.136.128</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">gateway 172.16.136.2</span><br></pre></td></tr></table></figure>
-
-<p>18之后版本的配置文件: <code>/etc/netplan/*.yml</code>, 其中<code>*.yml</code>指代其中存在的文件，设定固定ip，设定网关地址</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">network:</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">2</span></span><br><span class="line">  <span class="attr">ethernets:</span></span><br><span class="line">    <span class="attr">ens33:</span></span><br><span class="line">        <span class="attr">addresses:</span> <span class="string">[172.16.136.128/24]</span></span><br><span class="line">        <span class="attr">gateway4:</span> <span class="number">172.16</span><span class="number">.136</span><span class="number">.2</span></span><br><span class="line">        <span class="attr">nameservers:</span></span><br><span class="line">            <span class="attr">addresses:</span> <span class="string">[172.16.136.2]</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E8%99%9A%E6%8B%9F%E6%9C%BA/001.%20mac%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E8%AE%BE%E5%AE%9A%E8%81%94%E7%BD%91%E5%92%8C%E9%9D%99%E6%80%81ip%E5%9C%B0%E5%9D%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hikari111">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hikari111の技术博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/2020/03/21/%E8%99%9A%E6%8B%9F%E6%9C%BA/001.%20mac%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E8%AE%BE%E5%AE%9A%E8%81%94%E7%BD%91%E5%92%8C%E9%9D%99%E6%80%81ip%E5%9C%B0%E5%9D%80/" itemprop="url">Mac虚拟机安装ubuntu设定联网和静态ip地址</a></h1>
+                <a class="post-title-link" href="/blog/2020/03/21/%E5%B7%A5%E5%85%B7/002.%20mac%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E8%AE%BE%E5%AE%9A%E8%81%94%E7%BD%91%E5%92%8C%E9%9D%99%E6%80%81ip%E5%9C%B0%E5%9D%80/" itemprop="url">Mac虚拟机安装ubuntu设定联网和静态ip地址</a></h1>
         
 
         <div class="post-meta">
@@ -1660,6 +1520,150 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/02/20/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hikari111">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hikari111の技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2020/02/20/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB/" itemprop="url">操作系统中进程和线程的区别和关系</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-20T10:47:11+08:00">
+                2020-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="为什么计算机要设计进程和线程"><a href="#为什么计算机要设计进程和线程" class="headerlink" title="为什么计算机要设计进程和线程"></a>为什么计算机要设计进程和线程</h2><p>在理解这些概念之前首选要对并发有一定的感性认识，如果服务器同一时间内只能服务于一个客户端，其他客户端都再那里傻等的话，可见其性能的低下估计会被客户骂出翔来，因此并发编程应运而生，并发是网络编程中必须考虑的问题。实现并发的方式有多种：比如多进程、多线程、IO多路复用。</p>
+<h2 id="为什么可以并发提高CPU使用效率呢"><a href="#为什么可以并发提高CPU使用效率呢" class="headerlink" title="为什么可以并发提高CPU使用效率呢"></a>为什么可以并发提高CPU使用效率呢</h2><p>交给计算机的任务，大致上可以分为两类：I/O密集型任务和CPU密集型任务。顾名思义，CPU密集型任务在执行过程中，需要大量的cpu资源。对于这种任务，我们可以大胆地将CPU资源交给它来调度。IO密集型任务，大体上设计磁盘I/O、网络存取的任务，就都是I/O密集型任务。此类任务往往不需要太多的CPU，对于CPU来说，大多数时间被空耗在等待I/O完成上了。当人们认识到交给计算机的任务分为这两类的时候，人们就开始考虑如何做CPU的任务调度。在任务调度上，人们经历了多道程序、分时系统与多任务系统等阶段。</p>
+<h2 id="明确了并发的目标后，如何管理同时运行的程序"><a href="#明确了并发的目标后，如何管理同时运行的程序" class="headerlink" title="明确了并发的目标后，如何管理同时运行的程序"></a>明确了并发的目标后，如何管理同时运行的程序</h2><p>进程是资源（CPU、内存等）分配的基本单位，它是程序执行时的一个实例。程序运行时系统就会创建一个进程，并为它分配资源，然后把该进程放入进程就绪队列，进程调度器选中它的时候就会为它分配CPU时间，程序开始真正运行。</p>
+<h2 id="多进程"><a href="#多进程" class="headerlink" title="多进程"></a>多进程</h2><p>大多数的操作系统（包括 UNIX、Linux 和 Windows）对进程的识别采用的是唯一的进程标识符（pid），pid 通常是一个整数值。系统内的每个进程都有一个唯一 pid，它可以用作索引，维护一个进程树，以便访问内核中的进程的各种属性。<br>Linux系统函数fork()可以在父进程中创建一个子进程，这样的话，在一个进程接到来自客户端新的请求时就可以复制出一个子进程让其来处理，父进程只需负责监控请求的到来，然后创建子进程让其去处理，这样就能做到并发处理。windows同样有提供类似的方法</p>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>线程是程序执行时的最小单位，它是进程的一个执行流，是CPU调度和分派的基本单位，一个进程可以由很多个线程组成，线程间共享进程的所有资源，每个线程有自己的堆栈和局部变量。线程由CPU独立调度执行，在多CPU环境下就允许多个线程同时运行。同样多线程也可以实现并发操作，每个请求分配一个线程来处理。</p>
+<h2 id="线程和进程各自有什么区别和优劣呢"><a href="#线程和进程各自有什么区别和优劣呢" class="headerlink" title="线程和进程各自有什么区别和优劣呢"></a>线程和进程各自有什么区别和优劣呢</h2><ul>
+<li>进程是资源分配的最小单位，线程是程序执行的最小单位。</li>
+<li>进程有自己的独立地址空间，每启动一个进程，系统就会为它分配地址空间，建立数据表来维护代码段、堆栈段和数据段，这种操作非常昂贵。而线程是共享进程中的数据的，使用相同的地址空间，因此CPU切换一个线程的花费远比进程要小很多，同时创建一个线程的开销也比进程要小很多。</li>
+<li>线程之间的通信更方便，同一进程下的线程共享全局变量、静态变量等数据，而进程之间的通信需要以通信的方式（IPC)进行。不过如何处理好同步与互斥是编写多线程程序的难点。</li>
+<li>但是多进程程序更健壮，多线程程序只要有一个线程死掉，整个进程也死掉了，而一个进程死掉并不会对另外一个进程造成影响，因为进程有自己独立的地址空间。</li>
+</ul>
+<h2 id="通常来说，使用多线程会带来以下一些优势"><a href="#通常来说，使用多线程会带来以下一些优势" class="headerlink" title="通常来说，使用多线程会带来以下一些优势"></a>通常来说，使用多线程会带来以下一些优势</h2><ul>
+<li>将等待 I/O 操作的时间，调度到其他线程执行，提高 CPU 利用率；</li>
+<li>将计算密集型的操作留给工作线程，预留线程保持与用户的交互；</li>
+<li>在多 CPU/多核计算机下，有效吃干计算能力；</li>
+<li>相比多进程的程序，更有效地进行数据共享（在同一个进程空间）。</li>
+</ul>
+<h2 id="使用多线程要解决的问题"><a href="#使用多线程要解决的问题" class="headerlink" title="使用多线程要解决的问题"></a>使用多线程要解决的问题</h2><p>线程与线程之间的竞争问题导致结果不可预期，程序出现错误。</p>
+<ul>
+<li>（原子性）原因是单条指令存在原子性，但是cpu终端后多条指令的执行最终结果可能没发一致。</li>
+<li>（同步与锁）通过锁来保证在多个线程针对一个变量进行访问和处理，先后是有原子性的</li>
+<li>（过度优化对线程安全锁的破坏）编译器优化volatile保证内存即时刷新</li>
+<li>（cpu动态调度导致的顺序变化）使用cpu级别的指令保证执行顺序一致</li>
+</ul>
+<p>参考文章：<br><a href="https://foofish.net/thread-and-process.html" target="_blank" rel="noopener">一道面试题：说说进程和线程的区别</a><br><a href="https://liam.page/2017/01/17/layers-and-operation-system/" target="_blank" rel="noopener">程序员的自我修养（二）：操作系统、进程与线程</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -1710,7 +1714,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1723,7 +1727,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
