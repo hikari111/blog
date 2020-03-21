@@ -79,14 +79,14 @@
 
 
 
-<meta name="description" content="基础框架hexo 主题nextmaterial-x devops将 Hexo 部署到 GitHub Pagestravis的com和org区别 常见问题文章按照时间顺序更新next主题使用后Home和Artice浏览器访问出现%20url空格转义符号">
+<meta name="description" content="Building a GatewayThis guide walks you through how to use the Spring Cloud Gateway Creating A Simple Route创建一个路由 src&#x2F;main&#x2F;java&#x2F;gateway&#x2F;Application.java 1234@Beanpublic RouteLocator myRoutes(RouteLocat">
 <meta property="og:type" content="article">
-<meta property="og:title" content="博客搭建问题记录">
-<meta property="og:url" content="https://hikari111.github.io/2020/02/19/%E5%8D%9A%E5%AE%A2/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:title" content="网关&#x2F;002. Spring Cloud Gateway 官方案例">
+<meta property="og:url" content="https://hikari111.github.io/2020/03/21/%E7%BD%91%E5%85%B3/002.%20Spring%20Cloud%20Gateway%20%E5%AE%98%E6%96%B9%E6%A1%88%E4%BE%8B/index.html">
 <meta property="og:site_name" content="Hikari111の技术博客">
-<meta property="og:description" content="基础框架hexo 主题nextmaterial-x devops将 Hexo 部署到 GitHub Pagestravis的com和org区别 常见问题文章按照时间顺序更新next主题使用后Home和Artice浏览器访问出现%20url空格转义符号">
-<meta property="article:published_time" content="2020-02-19T02:47:11.000Z">
-<meta property="article:modified_time" content="2020-02-21T03:47:05.000Z">
+<meta property="og:description" content="Building a GatewayThis guide walks you through how to use the Spring Cloud Gateway Creating A Simple Route创建一个路由 src&#x2F;main&#x2F;java&#x2F;gateway&#x2F;Application.java 1234@Beanpublic RouteLocator myRoutes(RouteLocat">
+<meta property="article:published_time" content="2020-03-21T08:06:42.717Z">
+<meta property="article:modified_time" content="2020-03-21T08:06:42.717Z">
 <meta property="article:author" content="Hikari111">
 <meta name="twitter:card" content="summary">
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="https://hikari111.github.io/2020/02/19/博客/博客搭建问题记录/"/>
+  <link rel="canonical" href="https://hikari111.github.io/2020/03/21/网关/002. Spring Cloud Gateway 官方案例/"/>
 
 
 
 
 
-  <title>博客搭建问题记录 | Hikari111の技术博客</title>
+  <title>网关/002. Spring Cloud Gateway 官方案例 | Hikari111の技术博客</title>
   
 
 
@@ -231,7 +231,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/02/19/%E5%8D%9A%E5%AE%A2/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E7%BD%91%E5%85%B3/002.%20Spring%20Cloud%20Gateway%20%E5%AE%98%E6%96%B9%E6%A1%88%E4%BE%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hikari111">
@@ -248,7 +248,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">博客搭建问题记录</h1>
+          <h1 class="post-title" itemprop="name headline">网关/002. Spring Cloud Gateway 官方案例</h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-19T02:47:11+00:00">
-                2020-02-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T08:06:42+00:00">
+                2020-03-21
               </time>
             
 
@@ -298,10 +298,28 @@
       
 
       
-        <h2 id="基础框架"><a href="#基础框架" class="headerlink" title="基础框架"></a>基础框架</h2><p><a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">hexo</a></p>
-<h2 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h2><p><a href="https://theme-next.iissnan.com/" target="_blank" rel="noopener">next</a><br><a href="https://xaoxuu.com/wiki/material-x/" target="_blank" rel="noopener">material-x</a></p>
-<h2 id="devops"><a href="#devops" class="headerlink" title="devops"></a>devops</h2><p><a href="https://hexo.io/zh-cn/docs/github-pages" target="_blank" rel="noopener">将 Hexo 部署到 GitHub Pages</a><br><a href="https://devops.stackexchange.com/questions/1201/whats-the-difference-between-travis-ci-org-and-travis-ci-com" target="_blank" rel="noopener">travis的com和org区别</a></p>
-<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><a href="https://aiellochan.com/2018/02/13/hexo/Hexo-%E6%96%87%E7%AB%A0%E6%8C%89%E7%85%A7%E6%9B%B4%E6%96%B0%E6%97%B6%E9%97%B4%E6%8E%92%E5%BA%8F/" target="_blank" rel="noopener">文章按照时间顺序更新</a><br><a href="https://www.jianshu.com/p/b671e4082c13" target="_blank" rel="noopener">next主题使用后Home和Artice浏览器访问出现%20url空格转义符号</a></p>
+        <h1 id="Building-a-Gateway"><a href="#Building-a-Gateway" class="headerlink" title="Building a Gateway"></a>Building a Gateway</h1><p>This guide walks you through how to use the Spring Cloud Gateway</p>
+<h2 id="Creating-A-Simple-Route"><a href="#Creating-A-Simple-Route" class="headerlink" title="Creating A Simple Route"></a>Creating A Simple Route</h2><p>创建一个路由</p>
+<p><code>src/main/java/gateway/Application.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RouteLocator <span class="title">myRoutes</span><span class="params">(RouteLocatorBuilder builder)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> builder.routes().build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建一个转发路由<br>请求匹配路径<code>/get</code>,通过过滤器添加header，转发到uri<code>http://httpbin.org:80</code>访问<code>http://httpbin.org/get</code></p>
+<p><code>src/main/java/gateway/Application.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RouteLocator <span class="title">myRoutes</span><span class="params">(RouteLocatorBuilder builder)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> builder.routes()</span><br><span class="line">        .route(p -&gt; p</span><br><span class="line">            .path(<span class="string">"/get"</span>)</span><br><span class="line">            .filters(f -&gt; f.addRequestHeader(<span class="string">"Hello"</span>, <span class="string">"World"</span>))</span><br><span class="line">            .uri(<span class="string">"http://httpbin.org:80"</span>))</span><br><span class="line">        .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用Hystrix</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RouteLocator <span class="title">myRoutes</span><span class="params">(RouteLocatorBuilder builder)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> builder.routes()</span><br><span class="line">        .route(p -&gt; p</span><br><span class="line">            .path(<span class="string">"/get"</span>)</span><br><span class="line">            .filters(f -&gt; f.addRequestHeader(<span class="string">"Hello"</span>, <span class="string">"World"</span>))</span><br><span class="line">            .uri(<span class="string">"http://httpbin.org:80"</span>))</span><br><span class="line">        .route(p -&gt; p</span><br><span class="line">            .host(<span class="string">"*.hystrix.com"</span>)</span><br><span class="line">            .filters(f -&gt; f.hystrix(config -&gt; config.setName(<span class="string">"mycmd"</span>)))</span><br><span class="line">            .uri(<span class="string">"http://httpbin.org:80"</span>)).</span><br><span class="line">        build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>构建了路由2通过主机匹配：<code>*.hystrix.com</code>进行过滤器转发</p>
+<p>过滤器通过<code>f.hystrix(config -&gt; config.setName(&quot;mycmd&quot;))</code></p>
+<p>转发到目标地址：<code>http://httpbin.org:80</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RouteLocator <span class="title">myRoutes</span><span class="params">(RouteLocatorBuilder builder)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> builder.routes()</span><br><span class="line">        .route(p -&gt; p</span><br><span class="line">            .path(<span class="string">"/get"</span>)</span><br><span class="line">            .filters(f -&gt; f.addRequestHeader(<span class="string">"Hello"</span>, <span class="string">"World"</span>))</span><br><span class="line">            .uri(<span class="string">"http://httpbin.org:80"</span>))</span><br><span class="line">        .route(p -&gt; p</span><br><span class="line">            .host(<span class="string">"*.hystrix.com"</span>)</span><br><span class="line">            .filters(f -&gt; f.hystrix(config -&gt; config</span><br><span class="line">                .setName(<span class="string">"mycmd"</span>)</span><br><span class="line">                .setFallbackUri(<span class="string">"forward:/fallback"</span>)))</span><br><span class="line">            .uri(<span class="string">"http://httpbin.org:80"</span>))</span><br><span class="line">        .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Now when the Hystrix wrapped route times out it will call <code>/fallback</code> in the Gateway app. Lets add the <code>/fallback</code> endpoint to our application.</p>
+<p>当Hyatrix包装路由超时的时候，将会调用网关 <code>/fallback</code> , 需要添加网关的端点 <code>/fallback</code> 在我们的程序中</p>
+<p>在Application.java添加类注解 <code>@RestController</code>, 添加 <code>@RequestMapping</code> 在对应的方法上</p>
+<p><code>src/main/java/gateway/Application.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/fallback"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> Mono&lt;String&gt; <span class="title">fallback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> Mono.just(<span class="string">"fallback"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -326,14 +344,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/blog/2020/03/21/%E7%BD%91%E5%85%B3/003.%20%E9%80%9A%E8%BF%87%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CCallable%E5%AE%9E%E7%8E%B0%E5%B9%B6%E5%8F%91%E5%9B%9E%E8%B0%83/" rel="next" title="网关/003. 通过线程池和Callable实现并发回调">
+                <i class="fa fa-chevron-left"></i> 网关/003. 通过线程池和Callable实现并发回调
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2020/02/20/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="prev" title="操作系统中进程和线程的区别和关系">
-                操作系统中进程和线程的区别和关系 <i class="fa fa-chevron-right"></i>
+              <a href="/blog/2020/03/21/%E7%BD%91%E5%85%B3/001.%20Spring%20Cloud%20Gateway%20%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99%E5%AD%A6%E4%B9%A0%E6%95%B4%E7%90%86/" rel="prev" title="网关/001. Spring Cloud Gateway 入门资料学习整理">
+                网关/001. Spring Cloud Gateway 入门资料学习整理 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -448,7 +470,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础框架"><span class="nav-number">1.</span> <span class="nav-text">基础框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主题"><span class="nav-number">2.</span> <span class="nav-text">主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#devops"><span class="nav-number">3.</span> <span class="nav-text">devops</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见问题"><span class="nav-number">4.</span> <span class="nav-text">常见问题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Building-a-Gateway"><span class="nav-number">1.</span> <span class="nav-text">Building a Gateway</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Creating-A-Simple-Route"><span class="nav-number">1.1.</span> <span class="nav-text">Creating A Simple Route</span></a></li></ol></li></ol></div>
             
 
           </div>
