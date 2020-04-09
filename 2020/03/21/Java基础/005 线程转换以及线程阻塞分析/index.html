@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="gateway," />
+  <meta name="keywords" content="javase," />
 
 
 
@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="介绍该项目提供了一个用于在Spring MVC之上构建API网关的库。Spring Cloud Gateway旨在提供一种简单而有效的方法来路由到API，并为它们提供跨领域的关注点，例如：安全性，监视&#x2F;指标和弹性。 特征Spring Cloud Gateway功能：  基于Spring Framework 5，Project Reactor和Spring Boot 2.0构建: 性能高，吞吐量高，">
+<meta name="description" content="线程生命周期流程图synchrized关键字的原理和应用监视器，检视对应被锁住的对象，具备一个阻塞队列">
 <meta property="og:type" content="article">
-<meta property="og:title" content="001. Spring Cloud Gateway 入门资料学习整理">
-<meta property="og:url" content="https://hikari111.github.io/2020/03/21/%E7%BD%91%E5%85%B3/001.%20Spring%20Cloud%20Gateway%20%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99%E5%AD%A6%E4%B9%A0%E6%95%B4%E7%90%86/index.html">
+<meta property="og:title" content="线程相互通信方式分析">
+<meta property="og:url" content="https://hikari111.github.io/2020/03/21/Java%E5%9F%BA%E7%A1%80/005%20%E7%BA%BF%E7%A8%8B%E8%BD%AC%E6%8D%A2%E4%BB%A5%E5%8F%8A%E7%BA%BF%E7%A8%8B%E9%98%BB%E5%A1%9E%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="Hikari111の技术博客">
-<meta property="og:description" content="介绍该项目提供了一个用于在Spring MVC之上构建API网关的库。Spring Cloud Gateway旨在提供一种简单而有效的方法来路由到API，并为它们提供跨领域的关注点，例如：安全性，监视&#x2F;指标和弹性。 特征Spring Cloud Gateway功能：  基于Spring Framework 5，Project Reactor和Spring Boot 2.0构建: 性能高，吞吐量高，">
-<meta property="article:published_time" content="2020-03-21T08:14:24.000Z">
-<meta property="article:modified_time" content="2020-03-21T08:14:30.000Z">
+<meta property="og:description" content="线程生命周期流程图synchrized关键字的原理和应用监视器，检视对应被锁住的对象，具备一个阻塞队列">
+<meta property="article:published_time" content="2020-03-21T14:00:59.000Z">
+<meta property="article:modified_time" content="2020-04-09T09:49:35.753Z">
 <meta property="article:author" content="Hikari111">
-<meta property="article:tag" content="gateway">
+<meta property="article:tag" content="javase">
 <meta name="twitter:card" content="summary">
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://hikari111.github.io/2020/03/21/网关/001. Spring Cloud Gateway 入门资料学习整理/"/>
+  <link rel="canonical" href="https://hikari111.github.io/2020/03/21/Java基础/005 线程转换以及线程阻塞分析/"/>
 
 
 
 
 
-  <title>001. Spring Cloud Gateway 入门资料学习整理 | Hikari111の技术博客</title>
+  <title>线程相互通信方式分析 | Hikari111の技术博客</title>
   
 
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/%E7%BD%91%E5%85%B3/001.%20Spring%20Cloud%20Gateway%20%E5%85%A5%E9%97%A8%E8%B5%84%E6%96%99%E5%AD%A6%E4%B9%A0%E6%95%B4%E7%90%86/">
+    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/03/21/Java%E5%9F%BA%E7%A1%80/005%20%E7%BA%BF%E7%A8%8B%E8%BD%AC%E6%8D%A2%E4%BB%A5%E5%8F%8A%E7%BA%BF%E7%A8%8B%E9%98%BB%E5%A1%9E%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hikari111">
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">001. Spring Cloud Gateway 入门资料学习整理</h1>
+          <h1 class="post-title" itemprop="name headline">线程相互通信方式分析</h1>
         
 
         <div class="post-meta">
@@ -261,7 +261,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T08:14:24+00:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T14:00:59+00:00">
                 2020-03-21
               </time>
             
@@ -299,25 +299,7 @@
       
 
       
-        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>该项目提供了一个用于在Spring MVC之上构建API网关的库。Spring Cloud Gateway旨在提供一种简单而有效的方法来路由到API，并为它们提供跨领域的关注点，例如：安全性，监视/指标和弹性。</p>
-<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><p>Spring Cloud Gateway功能：</p>
-<ul>
-<li>基于Spring Framework 5，Project Reactor和Spring Boot 2.0构建: 性能高，吞吐量高，非阻塞io加上netty</li>
-<li>能够匹配任何请求属性上的路由。</li>
-<li>谓词和过滤器特定于路由。</li>
-<li>Hystrix断路器集成。: hystrix_route、hystrix_fallback_route实现熔断限流</li>
-<li>Spring Cloud DiscoveryClient集成：能够实现负载均衡</li>
-<li>易于编写的谓词和过滤器：谓词：进行请求匹配，有很多实现工厂，匹配(header、属性、方法…); 过滤器就是对于谓词匹配到的请求进行请求加工的。</li>
-<li>请求速率限制：limit_route</li>
-<li>路径改写：rewrite_route</li>
-</ul>
-<h2 id="特征代码入门"><a href="#特征代码入门" class="headerlink" title="特征代码入门"></a>特征代码入门</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemogatewayApplication</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建一个RouteLocator，显示网关路口路由管理的功能</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RouteLocator <span class="title">customRouteLocator</span><span class="params">(RouteLocatorBuilder builder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> builder.routes()</span><br><span class="line">            <span class="comment">// 路径路由：路径含有get的就转发到http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"path_route"</span>, r -&gt; r.path(<span class="string">"/get"</span>)</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 主机路由：host为*.myhost.org的请求就转发到http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"host_route"</span>, r -&gt; r.host(<span class="string">"*.myhost.org"</span>)</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 重写路由：主机是*.rewrite.org，将地址修改foo去掉，直接转发到http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"rewrite_route"</span>, r -&gt; r.host(<span class="string">"*.rewrite.org"</span>)</span><br><span class="line">                .filters(f -&gt; f.rewritePath(<span class="string">"/foo/(?&lt;segment&gt;.*)"</span>, <span class="string">"/$&#123;segment&#125;"</span>))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 断路器路由：访问*.hystrix.org的时候，添加断路器的命令，验证允许访问进入http://httpbin.org</span></span><br><span class="line">            .route(<span class="string">"hystrix_route"</span>, r -&gt; r.host(<span class="string">"*.hystrix.org"</span>)</span><br><span class="line">                .filters(f -&gt; f.hystrix(c -&gt; c.setName(<span class="string">"slowcmd"</span>)))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 断路兜底路由：访问*.hystrixfallback.org的时候，添加断路器命令，如果验证失败fallback跳转，否则就正向跳转</span></span><br><span class="line">            .route(<span class="string">"hystrix_fallback_route"</span>, r -&gt; r.host(<span class="string">"*.hystrixfallback.org"</span>)</span><br><span class="line">                .filters(f -&gt; f.hystrix(c -&gt; c.setName(<span class="string">"slowcmd"</span>).setFallbackUri(<span class="string">"forward:/hystrixfallback"</span>)))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            <span class="comment">// 限流路由：访问*.limited.org的时候，并且路径是/anything/**，添加redis的限流器的控制，通过访问目标</span></span><br><span class="line">            .route(<span class="string">"limit_route"</span>, r -&gt; r</span><br><span class="line">                .host(<span class="string">"*.limited.org"</span>).and().path(<span class="string">"/anything/**"</span>)</span><br><span class="line">                .filters(f -&gt; f.requestRateLimiter(c -&gt; c.setRateLimiter(redisRateLimiter())))</span><br><span class="line">                .uri(<span class="string">"http://httpbin.org"</span>))</span><br><span class="line">            .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="依赖引入方式"><a href="#依赖引入方式" class="headerlink" title="依赖引入方式"></a>依赖引入方式</h2><p>要运行自己的网关，请使用spring-cloud-starter-gateway依赖项。并且制定对应的版本</p>
-<h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><p>使用<a href="https://start.spring.io/" target="_blank" rel="noopener">spring初始化网页或者工具</a></p>
-<h2 id="笔记总结"><a href="#笔记总结" class="headerlink" title="笔记总结"></a>笔记总结</h2><p>我的目的是将我们在线系统引入网关，初步想实现的功能就是通过网关进行后台接口的请求，后台的服务进行多实例化不是，使用docker-compose配置启动的实力，加入redis实现服务调用的无状态化。</p>
-<p>进而在在网关层实现一部分功能：熔断和限流的措施，进行功能接触。</p>
-<p>总结下网关：<br>    路由匹配 - 谓词匹配 - 过滤器加工 的链式处理<br>    谓词有很多实现的匹配工厂类能够直接使用，过滤器相同<br>    我们主要编写的就是谓词和过滤器，添加配置，实现网关的功能。</p>
+        <h2 id="线程生命周期流程图"><a href="#线程生命周期流程图" class="headerlink" title="线程生命周期流程图"></a>线程生命周期流程图</h2><h2 id="synchrized关键字的原理和应用"><a href="#synchrized关键字的原理和应用" class="headerlink" title="synchrized关键字的原理和应用"></a>synchrized关键字的原理和应用</h2><p>监视器，检视对应被锁住的对象，具备一个阻塞队列</p>
 
       
     </div>
@@ -335,7 +317,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/gateway/" rel="tag"># gateway</a>
+            <a href="/blog/tags/javase/" rel="tag"># javase</a>
           
         </div>
       
@@ -348,8 +330,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2020/03/21/%E6%9D%83%E9%99%90/001.%20Springboot%20%E6%95%B4%E5%90%88Shiro/" rel="next" title="Springboot 整合Shiro">
-                <i class="fa fa-chevron-left"></i> Springboot 整合Shiro
+              <a href="/blog/2020/03/21/Java%E5%9F%BA%E7%A1%80/002%20%E9%80%9A%E8%BF%87Executors%20%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="next" title="002 通过Executors 创建线程池">
+                <i class="fa fa-chevron-left"></i> 002 通过Executors 创建线程池
               </a>
             
           </div>
@@ -358,8 +340,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2020/03/21/%E7%BD%91%E5%85%B3/003.%20%E9%80%9A%E8%BF%87%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CCallable%E5%AE%9E%E7%8E%B0%E5%B9%B6%E5%8F%91%E5%9B%9E%E8%B0%83/" rel="prev" title="通过线程池和Callable实现并发回调">
-                通过线程池和Callable实现并发回调 <i class="fa fa-chevron-right"></i>
+              <a href="/blog/2020/03/21/Java%E5%9F%BA%E7%A1%80/003%20ForkJoinPool%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8A%E5%8E%9F%E7%90%86/" rel="prev" title="ForkJoinPool线程池的使用以及原理">
+                ForkJoinPool线程池的使用以及原理 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -483,7 +465,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征"><span class="nav-number">2.</span> <span class="nav-text">特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征代码入门"><span class="nav-number">3.</span> <span class="nav-text">特征代码入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖引入方式"><span class="nav-number">4.</span> <span class="nav-text">依赖引入方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速开始"><span class="nav-number">5.</span> <span class="nav-text">快速开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#笔记总结"><span class="nav-number">6.</span> <span class="nav-text">笔记总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程生命周期流程图"><span class="nav-number">1.</span> <span class="nav-text">线程生命周期流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchrized关键字的原理和应用"><span class="nav-number">2.</span> <span class="nav-text">synchrized关键字的原理和应用</span></a></li></ol></div>
             
 
           </div>

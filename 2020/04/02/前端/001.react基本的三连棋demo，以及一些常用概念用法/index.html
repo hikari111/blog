@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="学习笔记、实战内容、读书笔记," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="知识点清单 环境搭建相关：node、npm、npx、create-react-app  创建react脚手架，了解脚手架基本功能123npx create-react-app my-appcd my-appnpm start  npm 和 npx 的区别npm 从5.2版开始，增加了 npx 命令。它有很多用处，本文介绍该命令的主要使用场景。  调用项目安装的模块（调用安装模块中的代码，不用指定n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react基本的三连棋demo，以及一些常用概念用法">
+<meta property="og:url" content="https://hikari111.github.io/2020/04/02/%E5%89%8D%E7%AB%AF/001.react%E5%9F%BA%E6%9C%AC%E7%9A%84%E4%B8%89%E8%BF%9E%E6%A3%8Bdemo%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E6%A6%82%E5%BF%B5%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:site_name" content="Hikari111の技术博客">
+<meta property="og:description" content="知识点清单 环境搭建相关：node、npm、npx、create-react-app  创建react脚手架，了解脚手架基本功能123npx create-react-app my-appcd my-appnpm start  npm 和 npx 的区别npm 从5.2版开始，增加了 npx 命令。它有很多用处，本文介绍该命令的主要使用场景。  调用项目安装的模块（调用安装模块中的代码，不用指定n">
+<meta property="article:published_time" content="2020-04-02T09:11:27.000Z">
+<meta property="article:modified_time" content="2020-04-02T09:11:32.000Z">
+<meta property="article:author" content="Hikari111">
+<meta property="article:tag" content="学习笔记、实战内容、读书笔记">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hikari111.github.io/2020/04/02/前端/001.react基本的三连棋demo，以及一些常用概念用法/"/>
+
+
+
+
+
+  <title>react基本的三连棋demo，以及一些常用概念用法 | Hikari111の技术博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/hikari111/blog" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hikari111の技术博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hikari111.github.io/blog/2020/04/02/%E5%89%8D%E7%AB%AF/001.react%E5%9F%BA%E6%9C%AC%E7%9A%84%E4%B8%89%E8%BF%9E%E6%A3%8Bdemo%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E6%A6%82%E5%BF%B5%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hikari111">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hikari111の技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">react基本的三连棋demo，以及一些常用概念用法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T09:11:27+00:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="知识点清单"><a href="#知识点清单" class="headerlink" title="知识点清单"></a>知识点清单</h2><ul>
+<li>环境搭建相关：node、npm、npx、create-react-app</li>
+</ul>
+<h2 id="创建react脚手架，了解脚手架基本功能"><a href="#创建react脚手架，了解脚手架基本功能" class="headerlink" title="创建react脚手架，了解脚手架基本功能"></a>创建react脚手架，了解脚手架基本功能</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npx create-react-app my-app</span><br><span class="line">cd my-app</span><br><span class="line">npm start</span><br></pre></td></tr></table></figure>
+
+<h2 id="npm-和-npx-的区别"><a href="#npm-和-npx-的区别" class="headerlink" title="npm 和 npx 的区别"></a>npm 和 npx 的区别</h2><p>npm 从5.2版开始，增加了 npx 命令。它有很多用处，本文介绍该命令的主要使用场景。</p>
+<ul>
+<li>调用项目安装的模块（调用安装模块中的代码，不用指定node_module)</li>
+<li>避免全局安装模块（可以不用全局安装模块而实现模块的调用）</li>
+<li>–no-install 参数和–ignore-existing 参数（对于全局安装的配置）</li>
+<li>使用不同版本的 node（可以使用不同的版本号）</li>
+<li>-p 参数（）</li>
+<li>-c 参数（）</li>
+<li>执行 GitHub 源码</li>
+</ul>
+<p>总结:</p>
+<p>npx就是npm的高级特性功能，在默认的5.2版本之后就自带了，有一些较为高级的用法，需要使用npx</p>
+<p>参考链接：<a href="http://www.ruanyifeng.com/blog/2019/02/npx.html" target="_blank" rel="noopener">npx 使用教程</a></p>
+<h2 id="一个游戏设计，介绍了react组件化开发的方式-复盘"><a href="#一个游戏设计，介绍了react组件化开发的方式-复盘" class="headerlink" title="一个游戏设计，介绍了react组件化开发的方式, 复盘"></a>一个游戏设计，介绍了react组件化开发的方式, 复盘</h2><p><a href="https://zh-hans.reactjs.org/tutorial/tutorial.html" target="_blank" rel="noopener">连接</a></p>
+<h2 id="组件的两种方式"><a href="#组件的两种方式" class="headerlink" title="组件的两种方式"></a>组件的两种方式</h2><ul>
+<li>默认组件继承component实现render函数</li>
+<li>使用函数，传递props直接通过返回值实现</li>
+</ul>
+<h2 id="为什么不可变性在-React-中非常重要"><a href="#为什么不可变性在-React-中非常重要" class="headerlink" title="为什么不可变性在 React 中非常重要"></a>为什么不可变性在 React 中非常重要</h2><p>一般来说，有两种改变数据的方式。第一种方式是直接修改变量的值，第二种方式是使用新的一份数据替换旧数据。</p>
+<p>相关函数：使用解构重构是一种好的方式</p>
+<ol>
+<li>slice()</li>
+<li>concat()</li>
+<li>var newPlayer = {…player, score: 2};</li>
+</ol>
+<p>直接修改数据</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> player = &#123;<span class="attr">score</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">'Jeff'</span>&#125;;</span><br><span class="line">player.score = <span class="number">2</span>;</span><br><span class="line"><span class="comment">// player 修改后的值为 &#123;score: 2, name: 'Jeff'&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>新数据替换旧数据</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> player = &#123;<span class="attr">score</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">'Jeff'</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> newPlayer = <span class="built_in">Object</span>.assign(&#123;&#125;, player, &#123;<span class="attr">score</span>: <span class="number">2</span>&#125;);</span><br><span class="line"><span class="comment">// player 的值没有改变, 但是 newPlayer 的值是 &#123;score: 2, name: 'Jeff'&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用对象展开语法，就可以写成：</span></span><br><span class="line"><span class="comment">// var newPlayer = &#123;...player, score: 2&#125;;</span></span><br></pre></td></tr></table></figure>
+
+<p>不直接修改（或改变底层数据）这种方式和前一种方式的结果是一样的，这种方式有以下几点好处：</p>
+<ul>
+<li><p>简化复杂的功能</p>
+<p>不可变性使得复杂的特性更容易实现。在后面的章节里，我们会实现一种叫做“时间旅行”的功能。“时间旅行”可以使我们回顾井字棋的历史步骤，并且可以“跳回”之前的步骤。这个功能并不是只有游戏才会用到——撤销和恢复功能在开发中是一个很常见的需求。不直接在数据上修改可以让我们追溯并复用游戏的历史记录。</p>
+</li>
+<li><p>跟踪数据的改变</p>
+<p>如果直接修改数据，那么就很难跟踪到数据的改变。跟踪数据的改变需要可变对象可以与改变之前的版本进行对比，这样整个对象树都需要被遍历一次。<br>跟踪不可变数据的变化相对来说就容易多了。如果发现对象变成了一个新对象，那么我们就可以说对象发生改变了。</p>
+</li>
+<li><p>确定在 React 中何时重新渲染</p>
+<p>不可变性最主要的优势在于它可以帮助我们在 React 中创建 pure components。我们可以很轻松的确定不可变数据是否发生了改变，从而确定何时对组件进行重新渲染。</p>
+</li>
+</ul>
+<h2 id="状态抽取、逻辑抽取、层次结构抽取"><a href="#状态抽取、逻辑抽取、层次结构抽取" class="headerlink" title="状态抽取、逻辑抽取、层次结构抽取"></a>状态抽取、逻辑抽取、层次结构抽取</h2><ul>
+<li>子组件一般情况下是显示和反馈组件，不维护自己的state</li>
+<li>一个功能，由最上层的组件来管理state，props传递给下层组件，实现交互。<ul>
+<li>而后可以将state存储到redux中，最上层组件也不需要管理状态了，通过redux管理，使用dispatch更新</li>
+<li>使用dispatch专门来做state管理，使用model来做逻辑管理，界面组件就专门做界面相关的事情</li>
+</ul>
+</li>
+</ul>
+<p>最佳实践：<br>  尽量编写存函数，类似静态函数，只有输入值，然后返回值，保证相同的输入，不可能会出现不同的输出，没有外部依赖，比如state、props、等等</p>
+<p>状态提升：<br>  将子组件维护的state提升到父组件来管理，通过判断数据就能够获取状态以及一些控制操作。相比操作界面简单，而且react是数据驱动，数据只要不相同就可以有不同的页面展示情况。</p>
+<p>总结：</p>
+<ol>
+<li>编写组件的方式有继承component、或者使用函数式组件</li>
+<li>经常的使用状态提升，通过最上层组件来管理状态，下层进行展示和方法交互</li>
+<li>使用开发工具能够查看浏览器对应的组件状态</li>
+<li>不可变性在react中很重要，可以实现简化复杂功能、跟踪数据的改变、确定在react中何时重新渲染可以进行性能优化</li>
+<li>不可变优化的方式：使用拷贝，替换 代替直接修改原值，类似的方法slice, Object.assign() 编写纯函数保证依赖</li>
+<li>不变的逻辑编写成函数的方式，保证能够扩展移植</li>
+<li>选择一个key的重要性，计算机是程序，没办法识别对应的组件，我们在一个层级的组件中，设定一个唯一的key，程序就能够快速识别对应的组件的变化，进行渲染</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%81%E5%AE%9E%E6%88%98%E5%86%85%E5%AE%B9%E3%80%81%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag"># 学习笔记、实战内容、读书笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2020/03/21/Java%E5%9F%BA%E7%A1%80/004%20%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%E5%88%86%E6%9E%90/" rel="next" title="线程相互通信方式分析">
+                <i class="fa fa-chevron-left"></i> 线程相互通信方式分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2020/04/06/%E5%89%8D%E7%AB%AF/002.react%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E4%BC%98%E5%8C%96/" rel="prev" title="react生命周期方法及优化方法">
+                react生命周期方法及优化方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Hikari111</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#知识点清单"><span class="nav-number">1.</span> <span class="nav-text">知识点清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建react脚手架，了解脚手架基本功能"><span class="nav-number">2.</span> <span class="nav-text">创建react脚手架，了解脚手架基本功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-和-npx-的区别"><span class="nav-number">3.</span> <span class="nav-text">npm 和 npx 的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个游戏设计，介绍了react组件化开发的方式-复盘"><span class="nav-number">4.</span> <span class="nav-text">一个游戏设计，介绍了react组件化开发的方式, 复盘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件的两种方式"><span class="nav-number">5.</span> <span class="nav-text">组件的两种方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么不可变性在-React-中非常重要"><span class="nav-number">6.</span> <span class="nav-text">为什么不可变性在 React 中非常重要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#状态抽取、逻辑抽取、层次结构抽取"><span class="nav-number">7.</span> <span class="nav-text">状态抽取、逻辑抽取、层次结构抽取</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hikari111</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
